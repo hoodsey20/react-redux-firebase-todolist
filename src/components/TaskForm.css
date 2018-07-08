@@ -1,0 +1,21 @@
+.taskForm {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.taskForm__radioContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.taskForm__radioContainer label {
+  margin: 5px 0;
+}
+
+.taskForm__buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
