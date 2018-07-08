@@ -1,0 +1,11 @@
+.App {
+  padding: 20px 0;
+
+  text-align: left;
+}
+
+.App__wrapper {
+  max-width: 770px;
+  width: 95%;
+  margin: 0 auto;
+}
