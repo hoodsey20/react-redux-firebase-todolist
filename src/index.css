@@ -1,0 +1,128 @@
+body {
+  box-sizing: border-box;
+
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+
+  font-family: sans-serif;
+
+  background-color: #e6e9f0;
+  background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+}
+
+body * {
+  box-sizing: border-box;
+}
+
+/**
+ * Button component
+ */
+
+button {
+  padding: 0;
+  border: none;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.btn[disabled] {
+  opacity: 0.5;
+}
+
+.btn {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+
+  margin: 2px 0;
+
+  border: solid 1px transparent;
+  border-radius: 4px;
+
+  padding: 0.5em 1em;
+
+  color: #FFFFFF;
+  background-color: #7a22fb;
+}
+
+.btn:active {
+  transform: translateY(1px);
+  filter: saturate(150%);
+}
+
+.btn:hover {
+  color: #7a22fb;
+  border-color: currentColor;
+  background-color: white;
+}
+
+.btn::-moz-focus-inner {
+  border: none;
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.5),
+    0 0 0 1.5px rgba(255, 105, 180, 0.5);
+}
+
+.btn_style_danger {
+  background-color: #ef266c;
+}
+
+.btn_style_danger:hover {
+  color: #ef266c;
+}
+
+.btn_style_base {
+  background-color: #3fa7e2;
+}
+
+.btn_style_base:hover {
+  color: #3fa7e2;
+}
+
+.btn_style_success {
+  background-color: #45d356;
+}
+
+.btn_style_success:hover {
+  color: #45d356;
+}
+
+/**
+ * form component
+ */
+
+.form {
+  padding: 15px 10px;
+
+  background-color: #fff;
+}
+
+.form input[type="text"] {
+  display: block;
+  width: 100%;
+  padding: 7px 5px;
+
+  font-size: 16px;
+}
+
+.form textarea {
+  display: block;
+  width: 100%;
+  border: 1px solid #e6e9f0;
+  padding: 7px 5px;
+
+  font-size: 16px;
+
+  resize: none;
+}
+
+.form__item {
+  margin-bottom: 15px;
+}
