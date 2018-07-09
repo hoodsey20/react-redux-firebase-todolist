@@ -26,6 +26,7 @@ class TaskList extends Component {
     this.fetchTasks = this.props.tasksActions.fetchTasks.bind(this);
     this.createTask = this.props.tasksActions.createTask.bind(this);
     this.deleteTask = this.props.tasksActions.deleteTask.bind(this);
+    this.setTaskStatus = this.props.tasksActions.setTaskStatus.bind(this);
   }
 
 
@@ -123,7 +124,6 @@ class TaskList extends Component {
               endtime,
               id,
             } = task;
-
             return (
               <TaskMiniCard
                 title={title}
@@ -136,6 +136,7 @@ class TaskList extends Component {
                 endtime={endtime ? getConvertedDate(endtime) : ''}
                 isOverdue={deadline ? now > deadline : false}
                 onDelete={this.deleteTask}
+                onToggleStatus={this.setTaskStatus}
               />
             );
           })}
@@ -164,6 +165,7 @@ TaskList.propTypes = {
     fetchTasks: PropTypes.func.isRequired,
     createTask: PropTypes.func.isRequired,
     deleteTask: PropTypes.func.isRequired,
+    setTaskStatus: PropTypes.func.isRequired,
   }).isRequired,
   tasks: PropTypes.shape({
     stage: PropTypes.string.isRequired,

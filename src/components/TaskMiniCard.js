@@ -2,28 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TaskStatus, TaskStatus2Words, ImportanceStatus2Words } from '../consts/tasks';
 
+import ChooseOverlay from './ChooseOverlay';
+
 import './TaskMiniCard.css';
 
-function ChooseOverlay(props) {
-  return (
-    <div className="taskMiniCard__overlay">
-      <button
-        type="button"
-        className="btn btn_style_success"
-        onClick={props.onSubmit}
-      >
-        {props.actionName}
-      </button>
-      <button
-        type="button"
-        className="btn btn_style_base"
-        onClick={props.onCancel}
-      >
-        Отмена
-      </button>
-    </div>
-  );
-}
 
 const OverlayType = {
   DELETE: 'DELETE',
@@ -35,16 +17,21 @@ class TaskMiniCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showOverlay: true,
+      showOverlay: false,
     };
   }
 
-  overlayCloseHandler = () => this.setState({ showOverlay: false });
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.status !== this.props.status) {
+      this.setState({ showOverlay: false });
+    }
+  }
 
+
+  overlayCloseHandler = () => this.setState({ showOverlay: false });
   delOverlayBtnHandler = () => this.setState({ showOverlay: OverlayType.DELETE });
   completeOverlayBtnHandler = () => this.setState({ showOverlay: OverlayType.COMPLETE });
   reopenOverlayBtnHandler = () => this.setState({ showOverlay: OverlayType.REOPEN });
-
 
   render() {
     const {
@@ -57,6 +44,7 @@ class TaskMiniCard extends Component {
       endtime,
       isOverdue,
       onDelete,
+      onToggleStatus,
     } = this.props;
 
     const isOpen = status === TaskStatus.OPEN;
@@ -71,11 +59,11 @@ class TaskMiniCard extends Component {
         break;
 
       case OverlayType.COMPLETE:
-        overlay = <ChooseOverlay actionName="Завершить" onCancel={this.overlayCloseHandler} />;
+        overlay = <ChooseOverlay actionName="Завершить" onCancel={this.overlayCloseHandler} onSubmit={() => onToggleStatus(id, TaskStatus.DONE)} />;
         break;
 
       case OverlayType.REOPEN:
-        overlay = <ChooseOverlay actionName="Возобновить" onCancel={this.overlayCloseHandler} />;
+        overlay = <ChooseOverlay actionName="Возобновить" onCancel={this.overlayCloseHandler} onSubmit={() => onToggleStatus(id, TaskStatus.OPEN)} />;
         break;
 
       default:
@@ -97,7 +85,6 @@ class TaskMiniCard extends Component {
               {!isOpen &&
                 <p className="taskMiniCard__info"><span>Завершена:</span> <span>{endtime}</span></p>
               }
-
             </div>
             <h2 className="taskMiniCard__title">{title}</h2>
           </header>
@@ -156,4 +143,5 @@ TaskMiniCard.propTypes = {
   endtime: PropTypes.string.isRequired,
   isOverdue: PropTypes.bool.isRequired,
   onDelete: PropTypes.func.isRequired,
+  onToggleStatus: PropTypes.func.isRequired,
 };
