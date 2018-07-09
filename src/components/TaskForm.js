@@ -35,7 +35,7 @@ class TaskForm extends Component {
       id: now,
       title: this.state.title,
       description: this.state.description,
-      deadline: +new Date(this.state.deadline),
+      deadline: this.state.deadline ? +new Date(this.state.deadline) : '',
       importance: this.state.importance,
       status: TaskStatus.OPEN,
     });
