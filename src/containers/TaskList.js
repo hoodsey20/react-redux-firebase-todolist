@@ -133,7 +133,7 @@ class TaskList extends Component {
                 id={id}
                 key={id}
                 deadline={deadline ? getConvertedDate(deadline) : ''}
-                endtime={endtime ? getConvertedDate(deadline) : ''}
+                endtime={endtime ? getConvertedDate(endtime) : ''}
                 isOverdue={deadline ? now > deadline : false}
                 onDelete={this.deleteTask}
               />
