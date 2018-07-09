@@ -1,0 +1,10 @@
+.radioFilter__form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.radioFilter__form label {
+  margin: 5px 0;
+}

@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import * as tasksActions from '../actions/tasks';
+import { ImportanceStatus, ImportanceStatus2Words } from '../consts/tasks';
 
 import { getConvertedDate } from '../util';
 import TaskMiniCard from '../components/TaskMiniCard';
 import TaskForm from '../components/TaskForm';
+import RadioFilter from '../components/RadioFilter';
 
 import './TaskList.css';
 
@@ -18,6 +20,7 @@ class TaskList extends Component {
     this.state = {
       showAddForm: false,
       showEditForm: false,
+      importanceFilterValue: null,
     };
 
     this.fetchTasks = this.props.tasksActions.fetchTasks.bind(this);
@@ -42,8 +45,21 @@ class TaskList extends Component {
     }));
   }
 
+  filterChangeHandler = (value) => {
+    this.setState({
+      importanceFilterValue: value,
+    });
+  }
+
+  filterResetHandler = () => {
+    this.setState({
+      importanceFilterValue: null,
+    });
+  }
+
   render() {
     const { tasks, error, stage } = this.props.tasks;
+    const { importanceFilterValue } = this.state;
 
     const isLoading = stage === 'loading';
 
@@ -56,14 +72,28 @@ class TaskList extends Component {
       return <div>Ошибка: {error}</div>;
     }
 
-    const taskList = Object.keys(tasks).map(i => tasks[i]);
+    let taskList = Object.keys(tasks).map(i => tasks[i]);
 
+    if (importanceFilterValue) {
+      taskList = taskList.filter(item => item.importance === importanceFilterValue);
+    }
 
     return (
       <div className="taskList">
         <h1 className="taskList__title">Список задач</h1>
 
-        <div className="taskList__dashboard">
+        <div className="taskList__filterContainer">
+          <RadioFilter
+            values={Object.keys(ImportanceStatus).map(key => ImportanceStatus[key])}
+            dictionary={ImportanceStatus2Words}
+            name="importance"
+            currentValue={this.state.importanceFilterValue}
+            onFilterChange={this.filterChangeHandler}
+            onFilterReset={this.filterResetHandler}
+          />
+        </div>
+
+        <div className="taskList__buttonConainer">
           <button
             className="btn"
             type="button"

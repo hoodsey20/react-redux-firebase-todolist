@@ -40,7 +40,6 @@ class TaskForm extends Component {
       status: TaskStatus.OPEN,
     });
 
-    this.onCancelHandler();
     this.setState(getInitialState());
   }
 
