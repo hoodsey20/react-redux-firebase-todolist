@@ -10,11 +10,13 @@
   height: 100%;
   z-index: 2;
 
-  padding: 50px 30px;
+  padding: 50px 15px;
 
   background-color: rgba(0, 0, 0, 0.5);
 }
 
 .taskList__buttonConainer {
-  padding: 10px 0;
+  padding: 15px 0;
+
+  text-align: center;
 }
