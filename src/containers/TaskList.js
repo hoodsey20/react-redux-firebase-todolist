@@ -25,6 +25,7 @@ class TaskList extends Component {
 
     this.fetchTasks = this.props.tasksActions.fetchTasks.bind(this);
     this.createTask = this.props.tasksActions.createTask.bind(this);
+    this.deleteTask = this.props.tasksActions.deleteTask.bind(this);
   }
 
 
@@ -134,6 +135,7 @@ class TaskList extends Component {
                 deadline={deadline ? getConvertedDate(deadline) : ''}
                 endtime={endtime ? getConvertedDate(deadline) : ''}
                 isOverdue={deadline ? now > deadline : false}
+                onDelete={this.deleteTask}
               />
             );
           })}
@@ -161,6 +163,7 @@ TaskList.propTypes = {
   tasksActions: PropTypes.shape({
     fetchTasks: PropTypes.func.isRequired,
     createTask: PropTypes.func.isRequired,
+    deleteTask: PropTypes.func.isRequired,
   }).isRequired,
   tasks: PropTypes.shape({
     stage: PropTypes.string.isRequired,

@@ -10,6 +10,7 @@ function ChooseOverlay(props) {
       <button
         type="button"
         className="btn btn_style_success"
+        onClick={props.onSubmit}
       >
         {props.actionName}
       </button>
@@ -47,13 +48,15 @@ class TaskMiniCard extends Component {
 
   render() {
     const {
+      id,
       title,
       description,
       status,
       importance,
       deadline,
       endtime,
-      isOverdue
+      isOverdue,
+      onDelete,
     } = this.props;
 
     const isOpen = status === TaskStatus.OPEN;
@@ -64,7 +67,7 @@ class TaskMiniCard extends Component {
 
     switch (showOverlay) {
       case OverlayType.DELETE:
-        overlay = <ChooseOverlay actionName="Удалить" onCancel={this.overlayCloseHandler} />;
+        overlay = <ChooseOverlay actionName="Удалить" onSubmit={() => onDelete(id)} onCancel={this.overlayCloseHandler} />;
         break;
 
       case OverlayType.COMPLETE:
@@ -144,6 +147,7 @@ class TaskMiniCard extends Component {
 export default TaskMiniCard;
 
 TaskMiniCard.propTypes = {
+  id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
@@ -151,4 +155,5 @@ TaskMiniCard.propTypes = {
   deadline: PropTypes.string.isRequired,
   endtime: PropTypes.string.isRequired,
   isOverdue: PropTypes.bool.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
