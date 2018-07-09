@@ -87,6 +87,7 @@ class TaskList extends Component {
             values={Object.keys(ImportanceStatus).map(key => ImportanceStatus[key])}
             dictionary={ImportanceStatus2Words}
             name="importance"
+            title="Показывать только со статусом:"
             currentValue={this.state.importanceFilterValue}
             onFilterChange={this.filterChangeHandler}
             onFilterReset={this.filterResetHandler}

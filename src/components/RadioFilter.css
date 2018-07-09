@@ -1,8 +1,26 @@
+.radioFilter {
+  padding: 15px 5px 5px;
+  background-color: #fff;
+}
+
+.radioFilter__title {
+  margin: 0;
+  font-size: 16px;
+}
+
 .radioFilter__form {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+}
+
+@media screen and (min-width: 992px) {
+  .radioFilter__form {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+  }
 }
 
 .radioFilter__form label {

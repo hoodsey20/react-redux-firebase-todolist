@@ -10,6 +10,7 @@ const RadioFilter = ({
   currentValue,
   onFilterChange,
   onFilterReset,
+  title,
 }) => {
   const changeHandler = (evt) => {
     onFilterChange(evt.target.value);
@@ -17,6 +18,7 @@ const RadioFilter = ({
 
   return (
     <div className="radioFilter">
+      <h2 className="radioFilter__title">{title}</h2>
       <form
         onChange={changeHandler}
         onReset={onFilterReset}
@@ -45,6 +47,7 @@ export default RadioFilter;
 
 RadioFilter.propTypes = {
   name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   currentValue: PropTypes.string,
   onFilterChange: PropTypes.func.isRequired,
   onFilterReset: PropTypes.func.isRequired,
