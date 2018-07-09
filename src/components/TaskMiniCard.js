@@ -1,75 +1,145 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { TaskStatus, TaskStatus2Words, ImportanceStatus2Words } from '../consts/tasks';
 
 import './TaskMiniCard.css';
 
-const TaskMiniCard = ({
-  title,
-  description,
-  status,
-  importance,
-  deadline,
-  endtime,
-  isOverdue
-}) => {
-  const isOpen = status === TaskStatus.OPEN;
-
+function ChooseOverlay(props) {
   return (
-    <article className={`taskMiniCard taskMiniCard_status_${status.toLowerCase()} ${isOverdue && isOpen ? 'isOverdue' : ''}`}>
-      <div className="taskMiniCard__wrap">
-        <header className="taskMiniCard__header">
-          <div className="taskMiniCard__infoContainer">
-            <p className="taskMiniCard__info"><span>Статус:</span> <span>{TaskStatus2Words.get(status)}</span></p>
-            <p className="taskMiniCard__info"><span>Важность:</span> <span>{ImportanceStatus2Words.get(importance)}</span></p>
-            {deadline &&
-              <p className="taskMiniCard__info"><span>Дедлайн:</span> <span>{deadline}</span></p>
-            }
-            {!isOpen &&
-              <p className="taskMiniCard__info"><span>Завершена:</span> <span>{endtime}</span></p>
-            }
-
-          </div>
-          <h2 className="taskMiniCard__title">{title}</h2>
-        </header>
-        <p className="taskMiniCard__description">{description}</p>
-
-        <footer className="taskMiniCard__footer">
-          {isOpen &&
-            <button
-              className="btn btn_style_success"
-              type="button"
-            >
-              Завершить
-            </button>
-          }
-
-          {!isOpen &&
-            <button
-              className="btn btn_style_base"
-              type="button"
-            >
-              Возобновить
-            </button>
-          }
-
-          <button
-            className="btn"
-            type="button"
-          >
-            Редактировать
-          </button>
-          <button
-            className="btn btn_style_danger"
-            type="button"
-          >
-            Удалить
-          </button>
-        </footer>
-      </div>
-    </article>
+    <div className="taskMiniCard__overlay">
+      <button
+        type="button"
+        className="btn btn_style_success"
+      >
+        {props.actionName}
+      </button>
+      <button
+        type="button"
+        className="btn btn_style_base"
+        onClick={props.onCancel}
+      >
+        Отмена
+      </button>
+    </div>
   );
+}
+
+const OverlayType = {
+  DELETE: 'DELETE',
+  COMPLETE: 'COMPLETE',
+  REOPEN: 'REOPEN',
 };
+
+class TaskMiniCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showOverlay: true,
+    };
+  }
+
+  overlayCloseHandler = () => this.setState({ showOverlay: false });
+
+  delOverlayBtnHandler = () => this.setState({ showOverlay: OverlayType.DELETE });
+  completeOverlayBtnHandler = () => this.setState({ showOverlay: OverlayType.COMPLETE });
+  reopenOverlayBtnHandler = () => this.setState({ showOverlay: OverlayType.REOPEN });
+
+
+  render() {
+    const {
+      title,
+      description,
+      status,
+      importance,
+      deadline,
+      endtime,
+      isOverdue
+    } = this.props;
+
+    const isOpen = status === TaskStatus.OPEN;
+
+    const { showOverlay } = this.state;
+
+    let overlay = null;
+
+    switch (showOverlay) {
+      case OverlayType.DELETE:
+        overlay = <ChooseOverlay actionName="Удалить" onCancel={this.overlayCloseHandler} />;
+        break;
+
+      case OverlayType.COMPLETE:
+        overlay = <ChooseOverlay actionName="Завершить" onCancel={this.overlayCloseHandler} />;
+        break;
+
+      case OverlayType.REOPEN:
+        overlay = <ChooseOverlay actionName="Возобновить" onCancel={this.overlayCloseHandler} />;
+        break;
+
+      default:
+        break;
+    }
+
+
+    return (
+      <article className={`taskMiniCard taskMiniCard_status_${status.toLowerCase()} ${isOverdue && isOpen ? 'isOverdue' : ''}`}>
+        {showOverlay && overlay}
+        <div className="taskMiniCard__wrap">
+          <header className="taskMiniCard__header">
+            <div className="taskMiniCard__infoContainer">
+              <p className="taskMiniCard__info"><span>Статус:</span> <span>{TaskStatus2Words.get(status)}</span></p>
+              <p className="taskMiniCard__info"><span>Важность:</span> <span>{ImportanceStatus2Words.get(importance)}</span></p>
+              {deadline &&
+                <p className="taskMiniCard__info"><span>Дедлайн:</span> <span>{deadline}</span></p>
+              }
+              {!isOpen &&
+                <p className="taskMiniCard__info"><span>Завершена:</span> <span>{endtime}</span></p>
+              }
+
+            </div>
+            <h2 className="taskMiniCard__title">{title}</h2>
+          </header>
+          <p className="taskMiniCard__description">{description}</p>
+
+          <footer className="taskMiniCard__footer">
+            {isOpen &&
+              <button
+                className="btn btn_style_success"
+                type="button"
+                onClick={this.completeOverlayBtnHandler}
+              >
+                Завершить
+              </button>
+            }
+
+            {!isOpen &&
+              <button
+                className="btn btn_style_base"
+                type="button"
+                onClick={this.reopenOverlayBtnHandler}
+              >
+                Возобновить
+              </button>
+            }
+
+            <button
+              className="btn"
+              type="button"
+            >
+              Редактировать
+            </button>
+            <button
+              className="btn btn_style_danger"
+              type="button"
+              onClick={this.delOverlayBtnHandler}
+            >
+              Удалить
+            </button>
+          </footer>
+        </div>
+      </article>
+    );
+  }
+}
 
 export default TaskMiniCard;
 
