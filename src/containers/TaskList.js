@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Notification from 'rc-notification';
 
 import * as tasksActions from '../actions/tasks';
-import { ImportanceStatus, ImportanceStatus2Words } from '../consts/tasks';
+import { ImportanceStatus, ImportanceStatus2Words, reduxActionResults } from '../consts/tasks';
 import { getConvertedDate } from '../util';
 
 import TaskMiniCard from '../components/TaskMiniCard';
@@ -59,7 +59,7 @@ class TaskList extends Component {
     const { tasks } = this.props;
     if (!tasks) return;
 
-    if (nextProps.tasks.updateStage === 'success' &&
+    if (nextProps.tasks.updateStage === reduxActionResults.SUCCESS &&
       tasks.updateStage !== nextProps.tasks.updateStage) {
       notification.notice({
         content: <span>Данные задачи обновлены</span>,
@@ -67,7 +67,7 @@ class TaskList extends Component {
       });
     }
 
-    if (nextProps.tasks.toggleStage === 'success' &&
+    if (nextProps.tasks.toggleStage === reduxActionResults.SUCCESS &&
       tasks.toggleStage !== nextProps.tasks.toggleStage) {
       notification.notice({
         content: <span>Состояние задачи обновлено</span>,
@@ -75,7 +75,7 @@ class TaskList extends Component {
       });
     }
 
-    if (nextProps.tasks.deleteStage === 'success' &&
+    if (nextProps.tasks.deleteStage === reduxActionResults.SUCCESS &&
       tasks.deleteStage !== nextProps.tasks.deleteStage) {
       notification.notice({
         content: <span>Задача удалена</span>,
@@ -83,7 +83,7 @@ class TaskList extends Component {
       });
     }
 
-    if (nextProps.tasks.createStage === 'success' &&
+    if (nextProps.tasks.createStage === reduxActionResults.SUCCESS &&
       tasks.createStage !== nextProps.tasks.createStage) {
       notification.notice({
         content: <span>Задача создана</span>,
@@ -128,7 +128,7 @@ class TaskList extends Component {
       editingTaskID
     } = this.state;
 
-    const isLoading = stage === 'loading';
+    const isLoading = stage === reduxActionResults.LOADING;
 
 
     if (isLoading) {

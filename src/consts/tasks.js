@@ -20,6 +20,12 @@ export const reduxActionTypes = {
   UPDATE_TASK_FAIL: 'UPDATE_TASK_FAIL',
 };
 
+export const reduxActionResults = {
+  LOADING: 'LOADING',
+  SUCCESS: 'SUCCESS',
+  FAIL: 'FAIL',
+};
+
 export const TaskStatus = {
   OPEN: 'OPEN',
   DONE: 'DONE',

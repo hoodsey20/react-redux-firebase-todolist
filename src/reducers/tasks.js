@@ -1,4 +1,4 @@
-import { reduxActionTypes } from '../consts/tasks';
+import { reduxActionTypes, reduxActionResults } from '../consts/tasks';
 
 const {
   REQUEST_TASKS,
@@ -22,10 +22,16 @@ const {
   UPDATE_TASK_FAIL,
 } = reduxActionTypes;
 
+const {
+  LOADING,
+  SUCCESS,
+  FAIL,
+} = reduxActionResults;
+
 const initialState = {
   error: null,
   tasks: null,
-  stage: 'loading',
+  stage: LOADING,
   actionError: null,
   createStage: null,
   deleteStage: null,
@@ -39,21 +45,21 @@ export default function rating(state = initialState, action) {
       return {
         ...state,
         error: null,
-        stage: 'loading',
+        stage: LOADING,
       };
 
     case FETCH_TASKS:
       return {
         ...state,
         error: null,
-        stage: 'success',
+        stage: SUCCESS,
         tasks: action.payload
       };
 
     case FAIL_FETCH_TASKS:
       return {
         ...state,
-        stage: 'fail',
+        stage: FAIL,
         error: action.payload
       };
 
@@ -61,20 +67,20 @@ export default function rating(state = initialState, action) {
       return {
         ...state,
         actionError: null,
-        createStage: 'loading',
+        createStage: LOADING,
       };
 
     case CREATE_TASK_SUCCESS:
       return {
         ...state,
         actionError: null,
-        createStage: 'success',
+        createStage: SUCCESS,
       };
 
     case CREATE_TASK_FAIL:
       return {
         ...state,
-        createStage: 'fail',
+        createStage: FAIL,
         actionError: action.payload,
       };
 
@@ -82,20 +88,20 @@ export default function rating(state = initialState, action) {
       return {
         ...state,
         actionError: null,
-        deleteStage: 'loading',
+        deleteStage: LOADING,
       };
 
     case DELETE_TASK_SUCCESS:
       return {
         ...state,
         actionError: null,
-        deleteStage: 'success',
+        deleteStage: SUCCESS,
       };
 
     case DELETE_TASK_FAIL:
       return {
         ...state,
-        deleteStage: 'fail',
+        deleteStage: FAIL,
         actionError: action.payload,
       };
 
@@ -103,20 +109,20 @@ export default function rating(state = initialState, action) {
       return {
         ...state,
         actionError: null,
-        toggleStage: 'loading',
+        toggleStage: LOADING,
       };
 
     case TOGGLE_TASK_STATE_SUCCESS:
       return {
         ...state,
         actionError: null,
-        toggleStage: 'success',
+        toggleStage: SUCCESS,
       };
 
     case TOGGLE_TASK_STATE_FAIL:
       return {
         ...state,
-        toggleStage: 'fail',
+        toggleStage: FAIL,
         actionError: action.payload,
       };
 
@@ -124,20 +130,20 @@ export default function rating(state = initialState, action) {
       return {
         ...state,
         actionError: null,
-        updateStage: 'loading',
+        updateStage: LOADING,
       };
 
     case UPDATE_TASK_SUCCESS:
       return {
         ...state,
         actionError: null,
-        updateStage: 'success',
+        updateStage: SUCCESS,
       };
 
     case UPDATE_TASK_FAIL:
       return {
         ...state,
-        updateStage: 'fail',
+        updateStage: FAIL,
         actionError: action.payload,
       };
 
