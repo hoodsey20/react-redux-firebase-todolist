@@ -142,7 +142,7 @@ class TaskForm extends Component {
             >
               Сохранить
             </button>
-            <button className="btn btn_style_base" type="reset">Отменить</button>
+            <button className="btn btn_style_base" type="reset">Закрыть</button>
           </div>
 
         </form>
