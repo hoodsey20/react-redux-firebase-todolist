@@ -17,7 +17,14 @@ import './TaskList.css';
 import '../../node_modules/rc-notification/assets/index.css';
 
 let notification = null;
-Notification.newInstance({}, (n) => {
+Notification.newInstance({
+  style: {
+    left: '2.5%',
+    bottom: '2.5%',
+    top: 'auto',
+    right: 'auto',
+  }
+}, (n) => {
   notification = n;
   return notification;
 });
@@ -44,6 +51,11 @@ class TaskList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const defaultNoticeStyles = {
+      backgroundColor: '#45d356',
+      color: '#fff',
+    };
+
     const { tasks } = this.props;
     if (!tasks) return;
 
@@ -51,7 +63,7 @@ class TaskList extends Component {
       tasks.updateStage !== nextProps.tasks.updateStage) {
       notification.notice({
         content: <span>Данные задачи обновлены</span>,
-        style: { backgroundColor: '#45d356', color: '#fff' }
+        style: defaultNoticeStyles,
       });
     }
 
@@ -59,7 +71,7 @@ class TaskList extends Component {
       tasks.toggleStage !== nextProps.tasks.toggleStage) {
       notification.notice({
         content: <span>Состояние задачи обновлено</span>,
-        style: { backgroundColor: '#45d356', color: '#fff' }
+        style: defaultNoticeStyles
       });
     }
 
@@ -67,7 +79,7 @@ class TaskList extends Component {
       tasks.deleteStage !== nextProps.tasks.deleteStage) {
       notification.notice({
         content: <span>Задача удалена</span>,
-        style: { backgroundColor: '#45d356', color: '#fff' }
+        style: defaultNoticeStyles
       });
     }
 
@@ -75,7 +87,7 @@ class TaskList extends Component {
       tasks.createStage !== nextProps.tasks.createStage) {
       notification.notice({
         content: <span>Задача создана</span>,
-        style: { backgroundColor: '#45d356', color: '#fff' }
+        style: defaultNoticeStyles
       });
     }
 
