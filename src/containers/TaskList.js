@@ -2,18 +2,25 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Notification from 'rc-notification';
 
 import * as tasksActions from '../actions/tasks';
 import { ImportanceStatus, ImportanceStatus2Words } from '../consts/tasks';
-
 import { getConvertedDate } from '../util';
+
 import TaskMiniCard from '../components/TaskMiniCard';
 import TaskForm from '../components/TaskForm';
 import RadioFilter from '../components/RadioFilter';
 import ChooseOverlay from '../components/ChooseOverlay';
 
 import './TaskList.css';
+import '../../node_modules/rc-notification/assets/index.css';
 
+let notification = null;
+Notification.newInstance({}, (n) => {
+  notification = n;
+  return notification;
+});
 
 class TaskList extends Component {
   constructor(props) {
@@ -34,6 +41,50 @@ class TaskList extends Component {
 
   componentDidMount() {
     this.fetchTasks();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { tasks } = this.props;
+    if (!tasks) return;
+
+    if (nextProps.tasks.updateStage === 'success' &&
+      tasks.updateStage !== nextProps.tasks.updateStage) {
+      notification.notice({
+        content: <span>Данные задачи обновлены</span>,
+        style: { backgroundColor: '#45d356', color: '#fff' }
+      });
+    }
+
+    if (nextProps.tasks.toggleStage === 'success' &&
+      tasks.toggleStage !== nextProps.tasks.toggleStage) {
+      notification.notice({
+        content: <span>Состояние задачи обновлено</span>,
+        style: { backgroundColor: '#45d356', color: '#fff' }
+      });
+    }
+
+    if (nextProps.tasks.deleteStage === 'success' &&
+      tasks.deleteStage !== nextProps.tasks.deleteStage) {
+      notification.notice({
+        content: <span>Задача удалена</span>,
+        style: { backgroundColor: '#45d356', color: '#fff' }
+      });
+    }
+
+    if (nextProps.tasks.createStage === 'success' &&
+      tasks.createStage !== nextProps.tasks.createStage) {
+      notification.notice({
+        content: <span>Задача создана</span>,
+        style: { backgroundColor: '#45d356', color: '#fff' }
+      });
+    }
+
+    if (nextProps.tasks.actionError) {
+      notification.notice({
+        content: <span>Ошибка обновления: {nextProps.tasks.actionError}</span>,
+        style: { backgroundColor: '#ef266c', color: '#fff' }
+      });
+    }
   }
 
   modalCancelHandler = () => {
@@ -182,6 +233,11 @@ TaskList.propTypes = {
   }).isRequired,
   tasks: PropTypes.shape({
     stage: PropTypes.string.isRequired,
+    updateStage: PropTypes.string,
+    toggleStage: PropTypes.string,
+    deleteStage: PropTypes.string,
+    createStage: PropTypes.string,
+    actionError: PropTypes.string,
     error: PropTypes.string,
     tasks: PropTypes.objectOf(PropTypes.object),
   }).isRequired,
