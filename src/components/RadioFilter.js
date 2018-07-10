@@ -18,12 +18,12 @@ const RadioFilter = ({
 
   return (
     <div className="radioFilter">
+      <h2 className="radioFilter__title">{title}</h2>
       <form
         onChange={changeHandler}
         onReset={onFilterReset}
         className="form radioFilter__form"
       >
-        <h2 className="radioFilter__title">{title}</h2>
         {values.map((item) => {
           return (
             <label key={item}>

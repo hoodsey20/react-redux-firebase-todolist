@@ -9,6 +9,7 @@
 .radioFilter__title {
   margin: 0;
   font-size: 16px;
+  text-align: center;
 }
 
 .radioFilter__form {
