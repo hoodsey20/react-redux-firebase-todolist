@@ -125,7 +125,6 @@ export function setTaskStatus(taskId, taskStatus) {
 }
 
 export function updateTaskData(taskId, data) {
-  console.log(data);
   return (dispatch) => {
     dispatch({ type: UPDATE_TASK });
 
