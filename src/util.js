@@ -10,3 +10,18 @@ export const getConvertedDate = (timestamp) => {
   const time = `${date} ${month} ${year} ${hour}:${min}:${sec}`;
   return time;
 };
+
+export const getInputFormatDate = (timestamp) => {
+  const a = new Date(timestamp);
+  const year = a.getFullYear();
+  let month = a.getMonth() + 1;
+  if (month.toString().length === 1) {
+    month = `0${month}`;
+  }
+  let date = a.getDate();
+  if (date.toString().length === 1) {
+    date = `0${date}`;
+  }
+  const time = `${year}-${month}-${date}`;
+  return time;
+};
