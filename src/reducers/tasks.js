@@ -16,21 +16,21 @@ const {
   TOGGLE_TASK_STATE,
   TOGGLE_TASK_STATE_SUCCESS,
   TOGGLE_TASK_STATE_FAIL,
+
+  UPDATE_TASK,
+  UPDATE_TASK_SUCCESS,
+  UPDATE_TASK_FAIL,
 } = reduxActionTypes;
 
 const initialState = {
-  tasks: null,
   error: null,
+  tasks: null,
   stage: 'loading',
-
+  actionError: null,
   createStage: null,
-  createError: null,
-
   deleteStage: null,
-  deleteError: null,
-
   toggleStage: null,
-  toggleError: null,
+  updateStage: null,
 };
 
 export default function rating(state = initialState, action) {
@@ -60,14 +60,14 @@ export default function rating(state = initialState, action) {
     case CREATE_TASK:
       return {
         ...state,
-        deleteError: null,
+        actionError: null,
         createStage: 'loading',
       };
 
     case CREATE_TASK_SUCCESS:
       return {
         ...state,
-        deleteError: null,
+        actionError: null,
         createStage: 'success',
       };
 
@@ -75,20 +75,20 @@ export default function rating(state = initialState, action) {
       return {
         ...state,
         createStage: 'fail',
-        createError: action.payload,
+        actionError: action.payload,
       };
 
     case DELETE_TASK:
       return {
         ...state,
-        deleteError: null,
+        actionError: null,
         deleteStage: 'loading',
       };
 
     case DELETE_TASK_SUCCESS:
       return {
         ...state,
-        deleteError: null,
+        actionError: null,
         deleteStage: 'success',
       };
 
@@ -96,20 +96,20 @@ export default function rating(state = initialState, action) {
       return {
         ...state,
         deleteStage: 'fail',
-        deleteError: action.payload,
+        actionError: action.payload,
       };
 
     case TOGGLE_TASK_STATE:
       return {
         ...state,
-        toggleError: null,
+        actionError: null,
         toggleStage: 'loading',
       };
 
     case TOGGLE_TASK_STATE_SUCCESS:
       return {
         ...state,
-        toggleError: null,
+        actionError: null,
         toggleStage: 'success',
       };
 
@@ -117,7 +117,28 @@ export default function rating(state = initialState, action) {
       return {
         ...state,
         toggleStage: 'fail',
-        toggleError: action.payload,
+        actionError: action.payload,
+      };
+
+    case UPDATE_TASK:
+      return {
+        ...state,
+        actionError: null,
+        updateStage: 'loading',
+      };
+
+    case UPDATE_TASK_SUCCESS:
+      return {
+        ...state,
+        actionError: null,
+        updateStage: 'success',
+      };
+
+    case UPDATE_TASK_FAIL:
+      return {
+        ...state,
+        updateStage: 'fail',
+        actionError: action.payload,
       };
 
     default:

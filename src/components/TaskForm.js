@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { ImportanceStatus, ImportanceStatus2Words, TaskStatus } from '../consts/tasks';
+import { getInputFormatDate } from '../util';
 
 import './TaskForm.css';
 
@@ -20,27 +21,42 @@ const requiredFields = ['title', 'description', 'importance'];
 class TaskForm extends Component {
   constructor(props) {
     super(props);
-    this.state = getInitialState();
+    const initialState = getInitialState();
+    const { editingTaskData } = this.props;
+    if (editingTaskData) {
+      if (editingTaskData.deadline) {
+        editingTaskData.deadline = getInputFormatDate(editingTaskData.deadline);
+      }
+      this.state = Object.assign(initialState, this.props.editingTaskData);
+    } else {
+      this.state = initialState;
+    }
 
     this.onSubmitHandler = this.props.onSubmitHandler.bind(this);
     this.onCancelHandler = this.props.onCancelHandler.bind(this);
   }
 
+  componentDidMount = () => {
+    this.checkReadyForSubmit();
+  }
+
   handleSubmit = (event) => {
     event.preventDefault();
 
-    const now = +new Date();
-
-    this.onSubmitHandler(now, {
-      id: now,
+    const id = this.state.id ? this.state.id : +new Date();
+    const taskDeadline = this.state.deadline ? +new Date(this.state.deadline) : null;
+    this.onSubmitHandler(id, {
+      id,
       title: this.state.title,
       description: this.state.description,
-      deadline: this.state.deadline ? +new Date(this.state.deadline) : '',
+      deadline: taskDeadline,
       importance: this.state.importance,
       status: TaskStatus.OPEN,
     });
 
-    this.setState(getInitialState());
+    if (!this.state.id) {
+      this.setState(getInitialState());
+    }
   }
 
   handleReset = () => {
@@ -48,10 +64,14 @@ class TaskForm extends Component {
     this.setState(getInitialState());
   }
 
+  checkReadyForSubmit = () => {
+    const isAllRequiredDataFilled = requiredFields.every(item => this.state[item]);
+    this.setState({ allowSubmit: isAllRequiredDataFilled });
+  }
+
   handleChangeForm = (event) => {
     this.setState({ [event.target.name]: event.target.value }, () => {
-      const isAllRequiredDataFilled = requiredFields.every(item => this.state[item]);
-      this.setState({ allowSubmit: isAllRequiredDataFilled });
+      this.checkReadyForSubmit();
     });
   }
 
@@ -72,7 +92,7 @@ class TaskForm extends Component {
             <input
               name="title"
               type="text"
-              value={this.state.title}
+              defaultValue={this.state.title}
               id="taskFormName"
             />
           </div>
@@ -83,7 +103,7 @@ class TaskForm extends Component {
               name="description"
               rows="5"
               type="text"
-              value={this.state.description}
+              defaultValue={this.state.description}
               id="taskFormDescription"
             />
           </div>
@@ -93,7 +113,7 @@ class TaskForm extends Component {
             <input
               name="deadline"
               type="date"
-              value={this.state.deadline}
+              defaultValue={this.state.deadline}
               id="taskFormDate"
             />
           </div>
@@ -106,6 +126,7 @@ class TaskForm extends Component {
                     name="importance"
                     type="radio"
                     value={item}
+                    defaultChecked={item === this.state.importance}
                   />
                   <span>{ImportanceStatus2Words.get(item)}</span>
                 </label>
@@ -136,8 +157,16 @@ TaskForm.propTypes = {
   title: PropTypes.string,
   onSubmitHandler: PropTypes.func.isRequired,
   onCancelHandler: PropTypes.func.isRequired,
+  editingTaskData: PropTypes.shape({
+    id: PropTypes.number,
+    deadline: PropTypes.number,
+    description: PropTypes.string,
+    title: PropTypes.string,
+    importance: PropTypes.string,
+  }),
 };
 
 TaskForm.defaultProps = {
-  title: 'Добавить задачу'
+  title: 'Добавить задачу',
+  editingTaskData: null,
 };

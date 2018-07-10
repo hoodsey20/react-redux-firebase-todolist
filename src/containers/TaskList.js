@@ -10,6 +10,7 @@ import { getConvertedDate } from '../util';
 import TaskMiniCard from '../components/TaskMiniCard';
 import TaskForm from '../components/TaskForm';
 import RadioFilter from '../components/RadioFilter';
+import ChooseOverlay from '../components/ChooseOverlay';
 
 import './TaskList.css';
 
@@ -20,6 +21,7 @@ class TaskList extends Component {
     this.state = {
       showAddForm: false,
       showEditForm: false,
+      editingTaskID: null,
       importanceFilterValue: null,
     };
 
@@ -27,8 +29,8 @@ class TaskList extends Component {
     this.createTask = this.props.tasksActions.createTask.bind(this);
     this.deleteTask = this.props.tasksActions.deleteTask.bind(this);
     this.setTaskStatus = this.props.tasksActions.setTaskStatus.bind(this);
+    this.updateTaskData = this.props.tasksActions.updateTaskData.bind(this);
   }
-
 
   componentDidMount() {
     this.fetchTasks();
@@ -47,31 +49,31 @@ class TaskList extends Component {
     }));
   }
 
-  filterChangeHandler = (value) => {
-    this.setState({
-      importanceFilterValue: value,
-    });
-  }
-
-  filterResetHandler = () => {
-    this.setState({
-      importanceFilterValue: null,
-    });
+  editFormButtonHandler = (id) => {
+    this.setState(({
+      showEditForm: true,
+      editingTaskID: id,
+    }));
   }
 
   render() {
     const { tasks, error, stage } = this.props.tasks;
-    const { importanceFilterValue } = this.state;
+    const {
+      importanceFilterValue,
+      showAddForm,
+      showEditForm,
+      editingTaskID
+    } = this.state;
 
     const isLoading = stage === 'loading';
 
 
     if (isLoading) {
-      return <div>Загрузка...</div>;
+      return <div>Получаю данные...</div>;
     }
 
     if (error) {
-      return <div>Ошибка: {error}</div>;
+      return <ChooseOverlay title={`Ошибка:${error}. Перезагрузите страницу.`} />;
     }
 
     let taskList = Object.keys(tasks).map(i => tasks[i]);
@@ -90,9 +92,9 @@ class TaskList extends Component {
             dictionary={ImportanceStatus2Words}
             name="importance"
             title="Показывать только со статусом:"
-            currentValue={this.state.importanceFilterValue}
-            onFilterChange={this.filterChangeHandler}
-            onFilterReset={this.filterResetHandler}
+            currentValue={importanceFilterValue}
+            onFilterChange={value => this.setState({ importanceFilterValue: value })}
+            onFilterReset={() => this.setState({ importanceFilterValue: null })}
           />
         </div>
 
@@ -102,17 +104,26 @@ class TaskList extends Component {
             type="button"
             onClick={this.addFormButtonHandler}
           >
-            {this.state.showAddForm ? 'Скрыть окно добавления' : 'Добавить задачу'}
+            {showAddForm ? 'Скрыть окно добавления' : 'Добавить задачу'}
           </button>
         </div>
 
         <section className="taskList__list">
-          {this.state.showAddForm &&
+          {showAddForm &&
             <TaskForm
               onSubmitHandler={this.createTask}
               onCancelHandler={this.modalCancelHandler}
             />
           }
+          {showEditForm &&
+            <TaskForm
+              onSubmitHandler={this.updateTaskData}
+              onCancelHandler={this.modalCancelHandler}
+              editingTaskData={Object.assign({}, tasks[editingTaskID])}
+              title="Редактировать задачу"
+            />
+          }
+
           {taskList.map((task) => {
             const now = +new Date();
             const {
@@ -137,6 +148,7 @@ class TaskList extends Component {
                 isOverdue={deadline ? now > deadline : false}
                 onDelete={this.deleteTask}
                 onToggleStatus={this.setTaskStatus}
+                onEdit={this.editFormButtonHandler}
               />
             );
           })}
@@ -166,6 +178,7 @@ TaskList.propTypes = {
     createTask: PropTypes.func.isRequired,
     deleteTask: PropTypes.func.isRequired,
     setTaskStatus: PropTypes.func.isRequired,
+    updateTaskData: PropTypes.func.isRequired,
   }).isRequired,
   tasks: PropTypes.shape({
     stage: PropTypes.string.isRequired,

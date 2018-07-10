@@ -18,6 +18,10 @@ const {
   TOGGLE_TASK_STATE,
   TOGGLE_TASK_STATE_SUCCESS,
   TOGGLE_TASK_STATE_FAIL,
+
+  UPDATE_TASK,
+  UPDATE_TASK_SUCCESS,
+  UPDATE_TASK_FAIL,
 } = reduxActionTypes;
 
 firebase.initializeApp(FB_CONFIG);
@@ -30,10 +34,8 @@ export function fetchTasks() {
 
     try {
       toDoListRef.on('value', (snapshot) => {
-        dispatch({
-          type: FETCH_TASKS,
-          payload: snapshot.val(),
-        });
+        const responseData = snapshot.val();
+        dispatch({ type: FETCH_TASKS, payload: responseData });
       });
     } catch (error) {
       dispatch({
@@ -116,6 +118,31 @@ export function setTaskStatus(taskId, taskStatus) {
     } catch (error) {
       dispatch({
         type: TOGGLE_TASK_STATE_FAIL,
+        payload: error.message,
+      });
+    }
+  };
+}
+
+export function updateTaskData(taskId, data) {
+  console.log(data);
+  return (dispatch) => {
+    dispatch({ type: UPDATE_TASK });
+
+    try {
+      firebase.database().ref(`todolist/${taskId}`).update(data, (error) => {
+        if (error) {
+          dispatch({
+            type: UPDATE_TASK_FAIL,
+            payload: error.message,
+          });
+        } else {
+          dispatch({ type: UPDATE_TASK_SUCCESS });
+        }
+      });
+    } catch (error) {
+      dispatch({
+        type: UPDATE_TASK_FAIL,
         payload: error.message,
       });
     }

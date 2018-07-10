@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { TaskStatus, TaskStatus2Words, ImportanceStatus2Words } from '../consts/tasks';
 
+import { TaskStatus, TaskStatus2Words, ImportanceStatus2Words } from '../consts/tasks';
 import ChooseOverlay from './ChooseOverlay';
 
 import './TaskMiniCard.css';
@@ -45,6 +45,7 @@ class TaskMiniCard extends Component {
       isOverdue,
       onDelete,
       onToggleStatus,
+      onEdit,
     } = this.props;
 
     const isOpen = status === TaskStatus.OPEN;
@@ -114,6 +115,7 @@ class TaskMiniCard extends Component {
             <button
               className="btn"
               type="button"
+              onClick={() => onEdit(id)}
             >
               Редактировать
             </button>
@@ -144,4 +146,5 @@ TaskMiniCard.propTypes = {
   isOverdue: PropTypes.bool.isRequired,
   onDelete: PropTypes.func.isRequired,
   onToggleStatus: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
 };
