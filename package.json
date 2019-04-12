@@ -1,6 +1,5 @@
 {
   "name": "react-redux-firebase-todolist",
-  "homepage": "http://hoodsey20.github.io/react-redux-firebase-todolist",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
