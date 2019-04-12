@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Notification from 'rc-notification';
+import 'rc-notification/assets/index.css';
 
 import * as tasksActions from '../actions/tasks';
 import { ImportanceStatus, ImportanceStatus2Words, reduxActionResults } from '../consts/tasks';
@@ -14,7 +15,6 @@ import RadioFilter from '../components/RadioFilter';
 import ChooseOverlay from '../components/ChooseOverlay';
 
 import './TaskList.css';
-import '../../node_modules/rc-notification/assets/index.css';
 
 let notification = null;
 Notification.newInstance({
